@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const personasRoutes = require('./routes/persona.routes');
 const productosRoutes = require('./routes/producto.routes');
+const asignacionProductosRoutes = require('./routes/asignacionProducto.routes')
 
 const App = express();
 const PORT = 3000;
@@ -10,11 +11,12 @@ const PORT = 3000;
 App.use(bodyParser.json());
 
 App.use('/api/personas', personasRoutes);
-App.use('/api/productos', productosRoutes); 
+App.use('/api/productos', productosRoutes);
+App.use('/api/asignaciones', asignacionProductosRoutes);
 
 //Conexión a la base de datos
 
-mongoose.connect('mongodb+srv://20233tn143:5yZYXxMXa6998s1H@mongazo1.yez4y.mongodb.net/inventario-db?retryWrites=true&w=majority&appName=Mongazo1', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://20233tn143:5yZYXxMXa6998s1H@mongazo1.yez4y.mongodb.net/inventario-db?retryWrites=true&w=majority&appName=Mongazo1')
     .then(() => {
         console.log('Conexión exitosa a la base de datos a MongoDB');
         App.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

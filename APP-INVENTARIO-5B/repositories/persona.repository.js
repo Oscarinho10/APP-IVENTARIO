@@ -41,14 +41,14 @@ class PersonaRepository {
     // el RFC sea igual al RFC que le estoy mandando
     // Y el Id sea diferente al id que le estoy mandando $ne
     async getPersonaByRFCAndNotId(id, rfc) {
-        return await Persona.findOne({ _id: { $ne: id, rfc: rfc } })
+        return await Persona.findOne({ _id: { $ne: id}, rfc: rfc })
     }
 
     // Buscar si hay otro correo igual de la persona que le estoy mandando(id)
     // el correo sea igual al correo que le estoy mandando
     // Y el Id sea diferente al id que le estoy mandando $ne
     async getPersonaByCorreoAndNotId(id, correo) {
-        return await Persona.findOne({ _id: { $ne: id, correo: correo } })
+        return await Persona.findOne({ _id: { $ne: id}, correo: correo })
     }
 }
 

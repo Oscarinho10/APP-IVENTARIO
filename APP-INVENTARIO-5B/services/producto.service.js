@@ -25,8 +25,8 @@ class ProductoService {
         }
 
         //Validar  que la fecha de adquisicion sea válida
-        if(!Validaciones.esFechaValida(producto.fechaAdquisicion)){
-
+        if (!Validaciones.esFechaValida(producto.fechaAdquisicion)) {
+            throw new Error('La fecha de adquisición no tiene el formato correcto');
         }
         //Generar número de inventario
         //año-consecutivo 20225-001
@@ -43,7 +43,7 @@ class ProductoService {
 
         return await ProductoRepository.crearProducto(producto);
     }
-    
+
     async getProductoById(id) {
         const producto = await ProductoRepository.getProductoById(id);
         if (!producto) {
@@ -60,6 +60,49 @@ class ProductoService {
         }
 
         return producto;
+    }
+
+    async updateProducto(id, producto) {
+        //Validar que el producto exista
+        const productoById = await ProductoRepository.getProductoById(id);
+        if (!productoById) {
+            throw new Error('Producto no encontrado')
+        }
+        //Validar que todos los campos obligatorios vengan
+        //Validar que todos los campos obligatorios vengan
+        if (!producto.nombre || !producto.precio || !producto.fechaAdquisicion || !producto.numSerie) {
+            throw new Error('Todos los campos son requeridos');
+        }
+
+        //Validar  que el el precio no sea negativo
+        if (producto.precio < 1) {
+            throw new Error('El precio debe ser mayor a 0');
+        }
+
+        //Validar  que la fecha de adquisicion sea válida
+        if (!Validaciones.esFechaValida(producto.fechaAdquisicion)) {
+            throw new Error('La fecha de adquisición no tiene el formato correcto');
+        }
+
+        //Validar que el numSerie no exista en otro producto
+        //Que no lo tengan otro prodcuto, que no sea el mismo producto
+        const productoByNumSerieAndNotId = await ProductoRepository.getProductoByNumSerieAndNotId(id, producto.numSerie);
+        if (productoByNumSerieAndNotId) {
+            throw new Error('El número de serie ya existe');
+        }
+
+        //No se edita el número de inventario
+
+        return await ProductoRepository.updateProducto(id, producto)
+
+    }
+
+    async deleteProducto(id) {
+        const productoById = await ProductoRepository.getProductoById(id);
+        if (!productoById) {
+            throw new Error('Producto no encontrado');
+        }
+        return await ProductoRepository.deleteProducto(id);
     }
 }
 

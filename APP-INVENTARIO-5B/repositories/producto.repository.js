@@ -22,6 +22,10 @@ class ProductoRepository {
         return await Producto.findByIdAndUpdate(id, producto, { new: true });
     }
 
+    async getProductoByNumSerieAndNotId(id, numSerie) {
+        return await Producto.findOne({ _id: { $ne: id}, numSerie: numSerie});
+    }
+
     async deleteProducto(id) {
         return await Producto.findByIdAndDelete(id);
     }
